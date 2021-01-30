@@ -55,7 +55,7 @@ namespace GGJ.Player
                     // hit object
                     vertex = raycastHitWall.point;
                 }
-                RaycastHit2D raycastHitObject =
+                /*RaycastHit2D raycastHitObject =
                     Physics2D.Raycast(origin, MathUtils.GetVectorFromAngle(angle), viewDistance - 0.5f, objectsLayerMask);
                 if (raycastHitObject.collider != null)
                 {
@@ -63,7 +63,7 @@ namespace GGJ.Player
                     vertex = origin + MathUtils.GetVectorFromAngle(angle) * viewDistance;
 
                     raycastHitObject.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
-                }
+                }*/
 
                 vertices[vertexIndex] = vertex;
 
