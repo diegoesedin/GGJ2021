@@ -7,6 +7,7 @@ namespace GGJ.Player
     public class PlayerController : MonoBehaviour
     {
         [SerializeField] private float speed;
+        [SerializeField] private FieldOfView fov;
 
         private Vector3 targetPosition;
         private Vector3 direction;
@@ -25,6 +26,12 @@ namespace GGJ.Player
 
             if (Input.GetMouseButtonUp(0))
                 direction = Vector2.zero;
+
+            Vector3 targetPosition = CameraUtils.GetMouseWorldPosition();
+            Vector3 aim = (targetPosition - transform.position).normalized;
+
+            fov.SetAimDirection(aim);
+            fov.SetOrigin(transform.position);
         }
 
         void FixedUpdate()
