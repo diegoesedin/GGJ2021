@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using GGJ.Crimes;
@@ -24,6 +25,8 @@ namespace GGJ
         private CrimeData crime;
         private Room.Room crimeRoom;
 
+        public Action GameEnded;
+
         void Start()
         {
             if (Instance == null)
@@ -37,6 +40,12 @@ namespace GGJ
             }
 
             StartTimer();
+
+            CrimeData[] crimes = Resources.LoadAll<CrimeData>("/");
+            //Debug.Log($"Crimes found: {crimes.Length}");
+
+            int selectedCrime = UnityEngine.Random.Range(0, crimes.Length);
+            InitCrime(crimes[selectedCrime]);
         }
 
         void Update()
@@ -45,6 +54,12 @@ namespace GGJ
             {
                 timer -= Time.deltaTime;
                 TimeLeft = (int)(timer % 60f);
+
+                if (timer <= 0)
+                {
+                    GameEnded?.Invoke();
+                    timeRunning = false;
+                }
             }
         }
 
@@ -62,6 +77,7 @@ namespace GGJ
             crimeRoom = rooms.First(room => room.RoomType == crime.Room);
             rooms.Remove(crimeRoom);
 
+            crimeRoom.InitCrime(crime.VictimGenre, crime.VictimHairColor);
         }
 
         private void GenerateRooms()
@@ -76,7 +92,7 @@ namespace GGJ
             rooms.Remove(rooms[randomRoom]);
         }
 
-        private Clue[] GetCluesFromTypes(CrimeTypes.Clues[] cluesTypes)
+        private Clue GetCluesFromTypes(CrimeTypes.Clues[] cluesTypes)
         {
             Clue[] clues = new Clue[cluesTypes.Length];
 
@@ -86,7 +102,7 @@ namespace GGJ
                 //clues[i]
             }
 
-            return clues;
+            return clues[0];
         }
 
         private void StartTimer()

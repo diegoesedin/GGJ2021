@@ -10,7 +10,14 @@ namespace GGJ.Room
         [SerializeField] public CrimeTypes.Rooms RoomType;
         [SerializeField] private Transform[] objectPlaces;
 
-        public void InitRoom(Clue[] clues)
+        public void InitRoom(Clue clue)
+        {
+            int randomPlacement = UnityEngine.Random.Range(0, objectPlaces.Length);
+
+            clue.gameObject.transform.SetParent(objectPlaces[randomPlacement]);
+        }
+
+        public void InitCrime(CrimeTypes.Genre victimGenre, CrimeTypes.HairColor victimHair)
         {
 
         }
