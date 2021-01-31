@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using GGJ;
 using GGJ.Crimes;
 using GGJ.FSM;
+using GGJ.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,13 +16,18 @@ namespace GJJ.UI
         [SerializeField] private Button option2Btn;
         [SerializeField] private Button option3Btn;
 
+        [SerializeField] private FinalResult result;
+
         private List<CrimeData> crimeList;
+
+        private string correctCrimeTitle;
 
         void Start()
         {
             option1Btn.onClick.AddListener(() => SelectOption(0));
             option2Btn.onClick.AddListener(() => SelectOption(1));
             option3Btn.onClick.AddListener(() => SelectOption(2));
+            result.HideAll();
         }
 
         private void SelectOption(int selectedOption)
@@ -30,16 +36,20 @@ namespace GJJ.UI
 
             if (selectedCrime == GameManager.Instance.CorrectCrime)
             {
-                GameManager.Instance.StateMachine.ChangeState(GameStateMachine.StateEnum.Menu);
+                //GameManager.Instance.StateMachine.ChangeState(GameStateMachine.StateEnum.Menu);
+                Debug.Log("Selection");
+                result.ShowVictory(correctCrimeTitle);
             }
             else
             {
-                Debug.Log("FAILED SELECTION");
+                result.ShowDefeat(correctCrimeTitle);
             }
         }
 
         public void InitSelectionUI(Dictionary<CrimeData, string> crimes)
         {
+            result.HideAll();
+            correctCrimeTitle = crimes[GameManager.Instance.CorrectCrime];
             List<CrimeData> crimesData = new List<CrimeData>();
             foreach (KeyValuePair<CrimeData, string> valuePair in crimes)
             {

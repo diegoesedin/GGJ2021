@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3a080bb960109b45a92f67a60002b8d, type: 3}
+  m_Name: CrimeData 3
+  m_EditorClassIdentifier: 
+  Weapon: 4
+  Room: 7
+  Clues: 0300000004000000
+  CriminalGenre: 1
+  VictimGenre: 0
+  CriminalHairColor: 0
+  VictimHairColor: 2
