@@ -9,7 +9,7 @@ namespace GGJ.Player
     {
         [SerializeField] private LayerMask wallLayerMask;
         [SerializeField] private LayerMask objectsLayerMask;
-        [SerializeField] private float fov;
+        [SerializeField] private float fov = 90f;
         [SerializeField] float viewDistance = 5f;
 
         private Mesh mesh;
@@ -21,7 +21,6 @@ namespace GGJ.Player
         {
             mesh = new Mesh();
             GetComponent<MeshFilter>().mesh = mesh;
-            fov = 90f;
             origin = Vector3.zero;
         }
 

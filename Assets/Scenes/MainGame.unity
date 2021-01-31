@@ -400,8 +400,8 @@ MonoBehaviour:
   objectsLayerMask:
     serializedVersion: 2
     m_Bits: 512
-  fov: 0
-  viewDistance: 5
+  fov: 65
+  viewDistance: 8
 --- !u!33 &210440714
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1398,6 +1398,14 @@ PrefabInstance:
     - target: {fileID: 7657149260352155094, guid: 658aa34677cda1045b7f99b3ad3c1fa1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657149260443715639, guid: 658aa34677cda1045b7f99b3ad3c1fa1, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 11.193341
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657149260443715639, guid: 658aa34677cda1045b7f99b3ad3c1fa1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.186
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 658aa34677cda1045b7f99b3ad3c1fa1, type: 3}

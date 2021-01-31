@@ -9,18 +9,25 @@ namespace GGJ.FSM
         private float timer;
         private bool timeRunning;
 
+        private GameObject player;
+        private Vector3 startPosition;
+
         public override void Init()
         {
+            player = GameObject.Find("Player");
+            startPosition = player.transform.position;
         }
 
         public override void Enter()
         {
             GameManager.Instance.UserInterface.GameUI.SetActive(true);
+            player.transform.position = startPosition;
             StartTimer();
         }
 
         public override void Exit()
         {
+            timeRunning = false;
             GameManager.Instance.UserInterface.GameUI.SetActive(false);
         }
 
@@ -40,6 +47,9 @@ namespace GGJ.FSM
                     timeRunning = false;
                 }
             }
+
+            if (Input.GetKeyUp(KeyCode.Escape))
+                GameManager.Instance.StateMachine.ChangeState(GameStateMachine.StateEnum.Menu);
         }
 
         private void StartTimer()

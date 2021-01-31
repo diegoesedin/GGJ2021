@@ -36,8 +36,12 @@ namespace GGJ.FSM
             fsm.Add(StateEnum.Game, gameState);
             fsm.Add(StateEnum.Final, finalState);
 
+            foreach (var state in fsm)
+            {
+                state.Value.Init();
+            }
+
             selectedState = fsm[StateEnum.Menu];
-            selectedState.Init();
             selectedState.Enter();
         }
 
