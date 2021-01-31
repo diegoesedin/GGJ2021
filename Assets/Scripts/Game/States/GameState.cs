@@ -29,6 +29,7 @@ namespace GGJ.FSM
         public override void Exit()
         {
             timeRunning = false;
+            GameManager.Instance.ClearCrime();
             GameManager.Instance.UserInterface.GameUI.SetActive(false);
         }
 

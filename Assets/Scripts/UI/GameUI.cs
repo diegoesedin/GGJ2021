@@ -19,7 +19,7 @@ namespace GGJ.UI
 
         void Update()
         {
-            timerText.text = $"00:{GameManager.Instance.TimeLeft:00}";
+            timerText.text = $"{GameManager.Instance.TimeLeft:00}";
         }
 
         private void ChangeLocation(CrimeTypes.Rooms room)

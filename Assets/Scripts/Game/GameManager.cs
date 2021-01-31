@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using GGJ.Crimes;
+using GGJ.Data;
 using GGJ.FSM;
 using GGJ.Items;
 using GGJ.UI;
@@ -33,7 +34,9 @@ namespace GGJ
         private CrimeData crime;
         private Room.Room crimeRoom;
 
-        [Header("Prefabs")] [SerializeField] public GameObject ItemPrefab;
+        [Header("Prefabs")]
+        [SerializeField] public GameObject ItemPrefab;
+        [SerializeField] public GameObject VictimPrefab;
 
         void Awake()
         {
@@ -55,8 +58,8 @@ namespace GGJ
 
         public void InitCrime()
         {
-            CrimeData[] crimes = Resources.LoadAll<CrimeData>("/");
-            //Debug.Log($"Crimes found: {crimes.Length}");
+            CrimeData[] crimes = Resources.LoadAll<CrimeData>("CrimeData/");
+            Debug.Log($"Crimes found: {crimes.Length}");
             int selectedCrime = UnityEngine.Random.Range(0, crimes.Length);
 
             crime = crimes[selectedCrime];
@@ -69,13 +72,33 @@ namespace GGJ
             GenerateRooms(newGameRooms);
         }
 
+        public void ClearCrime()
+        {
+            foreach (Room.Room room in rooms)
+            {
+                room.ClearCrimeScene();
+            }
+        }
+
         private void InitCrimeScene(List<Room.Room> _rooms)
         {
             crimeRoom = _rooms.First(room => room.RoomType == crime.Room);
             _rooms.Remove(crimeRoom);
 
             Debug.Log($"Initialized crime in {crimeRoom.RoomType.ToString()}");
-            crimeRoom.InitCrime(crime.VictimGenre, crime.VictimHairColor);
+
+            crimeRoom.InitCrime(GetVictim(crime.VictimGenre, crime.VictimHairColor));
+        }
+
+        private Victim GetVictim(CrimeTypes.Genre victimGenre, CrimeTypes.HairColor hairColor)
+        {
+            VictimSpriteData[] victimSprites = Resources.LoadAll<VictimSpriteData>("SpriteData/VictimData/");
+            Debug.Log($"Victims found for selection: {victimSprites.Length}");
+            GameObject go = UnityEngine.MonoBehaviour.Instantiate(GameManager.Instance.VictimPrefab);
+            Victim victim = go.GetComponent<Victim>();
+            victim.DressVictim(victimSprites.First(data => data.genre == victimGenre && data.hairColor == hairColor).sprite);
+
+            return victim;
         }
 
         private void GenerateRooms(List<Room.Room> _rooms)

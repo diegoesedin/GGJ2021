@@ -73,12 +73,22 @@ namespace GGJ.FSM
 
             switch (hair)
             {
-                case CrimeTypes.HairColor.Black:
-                    return "Pelo negro";
                 case CrimeTypes.HairColor.Blonde:
                     return "Pelo rubio";
+                case CrimeTypes.HairColor.Black:
+                    return "Pelo negro";
+                case CrimeTypes.HairColor.Brown:
+                    return "Pelo castaño";
                 case CrimeTypes.HairColor.Red:
                     return "Pelo rojo";
+                case CrimeTypes.HairColor.Orange:
+                    return "Pelo naranja";
+                case CrimeTypes.HairColor.Purple:
+                    return "Pelo violeta";
+                case CrimeTypes.HairColor.Blue:
+                    return "Pelo azul";
+                case CrimeTypes.HairColor.Green:
+                    return "Pelo verde";
                 default:
                     return "Unknown";
             }
@@ -119,8 +129,10 @@ namespace GGJ.FSM
                     return "con Cuchillo";
                 case CrimeTypes.Weapons.Pistol:
                     return "a tiros con una Pistola";
-                case CrimeTypes.Weapons.Shotgun:
-                    return "a tiros con una Escopeta";
+                case CrimeTypes.Weapons.Bat:
+                    return "a golpes con un bat";
+                case CrimeTypes.Weapons.Poison:
+                    return "con veneno";
                 case CrimeTypes.Weapons.Hands:
                     return "a golpes";
                 default:

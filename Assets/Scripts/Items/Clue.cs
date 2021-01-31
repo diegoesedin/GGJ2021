@@ -23,5 +23,10 @@ namespace GGJ.Items
                 isShowed = true;
             }
         }
+
+        public void DrawSprite(Sprite sprite)
+        {
+            GetComponent<SpriteRenderer>().sprite = sprite;
+        }
     }
 }

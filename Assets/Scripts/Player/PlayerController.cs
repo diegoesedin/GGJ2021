@@ -21,6 +21,10 @@ namespace GGJ.Player
 
         void Update()
         {
+            var mouseDirection = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
+            var angle = Mathf.Atan2(mouseDirection.y, mouseDirection.x) * Mathf.Rad2Deg;
+            rigidbody.MoveRotation(Quaternion.AngleAxis(angle, Vector3.forward));
+
             if (Input.GetMouseButton(0))
                 Move();
 

@@ -10,7 +10,8 @@ namespace GGJ.Crimes
         {
             Knife,
             Pistol,
-            Shotgun,
+            Bat,
+            Poison,
             Hands
         }
 
@@ -24,7 +25,12 @@ namespace GGJ.Crimes
         {
             Blonde,
             Black,
-            Red
+            Brown,
+            Red,
+            Orange,
+            Purple,
+            Blue,
+            Green
         }
 
         public enum Rooms
@@ -44,8 +50,11 @@ namespace GGJ.Crimes
         {
             BloodLine,
             BloodWall,
-            Scratches,
-            Spots,
+            BloodSpot,
+            BloodHand,
+            BloodFeet,
+            BulletsHoles,
+            PoisonSpot,
         }
     }
 }

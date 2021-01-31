@@ -9,13 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3a080bb960109b45a92f67a60002b8d, type: 3}
-  m_Name: CrimeData
+  m_Script: {fileID: 11500000, guid: b9243bc6fdee7c04ba67eb294eec9fd5, type: 3}
+  m_Name: Weapon4
   m_EditorClassIdentifier: 
-  Weapon: 0
-  Room: 0
-  Clues: 0000000003000000
-  CriminalGenre: 0
-  VictimGenre: 0
-  CriminalHairColor: 1
-  VictimHairColor: 0
+  sprite: {fileID: -8729411071372919457, guid: 5a71bc8b9f3e7584ba7b6b448cabee74, type: 3}
+  weapon: 3
