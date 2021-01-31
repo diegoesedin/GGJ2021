@@ -22,6 +22,7 @@ namespace GGJ.FSM
         {
             GameManager.Instance.UserInterface.GameUI.SetActive(true);
             player.transform.position = startPosition;
+            GameManager.Instance.UserInterface.GameTooltip.HideTooltip();
             StartTimer();
         }
 

@@ -22,7 +22,7 @@ namespace GGJ
         public CrimeData[] FakeCrimes;
 
         public int TimeLeft;
-        public Action GameEnded;
+        public Action<CrimeTypes.Rooms> OnRoomEnter;
 
         [Header("Gameplay")]
         [SerializeField] public int GameLimitTime = 30;

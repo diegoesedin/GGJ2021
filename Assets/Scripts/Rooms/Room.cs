@@ -23,5 +23,10 @@ namespace GGJ.Room
         {
 
         }
+
+        void OnTriggerEnter2D(Collider2D collider)
+        {
+            GameManager.Instance.OnRoomEnter?.Invoke(RoomType);
+        }
     }
 }

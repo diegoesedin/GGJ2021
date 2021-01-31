@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using GGJ.Items;
 using UnityEngine;
 
 namespace GGJ.Player
@@ -55,13 +56,10 @@ namespace GGJ.Player
                     vertex = raycastHitWall.point;
                 }
                 /*RaycastHit2D raycastHitObject =
-                    Physics2D.Raycast(origin, MathUtils.GetVectorFromAngle(angle), viewDistance - 0.5f, objectsLayerMask);
+                    Physics2D.Raycast(origin, MathUtils.GetVectorFromAngle(angle), viewDistance, objectsLayerMask);
                 if (raycastHitObject.collider != null)
                 {
-
-                    vertex = origin + MathUtils.GetVectorFromAngle(angle) * viewDistance;
-
-                    raycastHitObject.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+                    raycastHitObject.transform.gameObject.GetComponent<Clue>().Showed();
                 }*/
 
                 vertices[vertexIndex] = vertex;

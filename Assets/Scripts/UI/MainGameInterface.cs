@@ -12,6 +12,8 @@ namespace GGJ.UI
         [SerializeField] public GameObject GameUI;
         [SerializeField] public GameObject SelectionUI;
 
+        public Tooltip GameTooltip;
+
         void Update()
         {
         }
