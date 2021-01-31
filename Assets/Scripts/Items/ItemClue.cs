@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace GGJ.Items
 {
-    public class Clue : MonoBehaviour
+    public class ItemClue : Clue
     {
-        public virtual void Showed() { }
+
     }
 }

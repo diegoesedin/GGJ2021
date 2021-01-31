@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using GGJ.Crimes;
+using GGJ.Items;
 using UnityEngine;
 
 namespace GGJ.Room
@@ -15,6 +16,7 @@ namespace GGJ.Room
             int randomPlacement = UnityEngine.Random.Range(0, objectPlaces.Length);
 
             clue.gameObject.transform.SetParent(objectPlaces[randomPlacement]);
+            clue.gameObject.transform.localPosition = Vector3.zero;
         }
 
         public void InitCrime(CrimeTypes.Genre victimGenre, CrimeTypes.HairColor victimHair)

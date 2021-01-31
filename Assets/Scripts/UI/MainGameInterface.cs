@@ -8,11 +8,12 @@ namespace GGJ.UI
 {
     public class MainGameInterface : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI timerText;
+        [SerializeField] public GameObject MenuUI;
+        [SerializeField] public GameObject GameUI;
+        [SerializeField] public GameObject SelectionUI;
 
         void Update()
         {
-            timerText.text = $"00:{GameManager.Instance.TimeLeft}";
         }
 
     }

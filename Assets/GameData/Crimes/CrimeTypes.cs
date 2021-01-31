@@ -10,7 +10,8 @@ namespace GGJ.Crimes
         {
             Knife,
             Pistol,
-            Shotgun
+            Shotgun,
+            Hands
         }
 
         public enum Genre

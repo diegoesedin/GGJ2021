@@ -3,21 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using GGJ.Crimes;
+using GGJ.FSM;
+using GGJ.Items;
+using GGJ.UI;
 using UnityEngine;
 
 namespace GGJ
 {
+    [RequireComponent(typeof(GameStateMachine))]
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance;
 
-        [Header("Gameplay")]
-        [SerializeField] private int gameLimitTime;
+        public MainGameInterface UserInterface;
+        public GameStateMachine StateMachine;
+
+        public CrimeData CorrectCrime => crime;
+        public CrimeData[] FakeCrimes;
 
         public int TimeLeft;
+        public Action GameEnded;
 
-        private float timer;
-        private bool timeRunning;
+        [Header("Gameplay")]
+        [SerializeField] public int GameLimitTime = 30;
 
         [Header("Crime Data")]
         [SerializeField] private List<Room.Room> rooms;
@@ -25,91 +33,131 @@ namespace GGJ
         private CrimeData crime;
         private Room.Room crimeRoom;
 
-        public Action GameEnded;
+        [Header("Prefabs")] [SerializeField] public GameObject ItemPrefab;
 
-        void Start()
+        void Awake()
         {
             if (Instance == null)
             {
                 Instance = this;
+                StateMachine = GetComponent<GameStateMachine>();
                 DontDestroyOnLoad(Instance);
             }
             else
             {
                 Destroy(gameObject);
             }
-
-            StartTimer();
-
-            CrimeData[] crimes = Resources.LoadAll<CrimeData>("/");
-            //Debug.Log($"Crimes found: {crimes.Length}");
-
-            int selectedCrime = UnityEngine.Random.Range(0, crimes.Length);
-            InitCrime(crimes[selectedCrime]);
         }
 
         void Update()
         {
-            if (timeRunning)
-            {
-                timer -= Time.deltaTime;
-                TimeLeft = (int)(timer % 60f);
-
-                if (timer <= 0)
-                {
-                    GameEnded?.Invoke();
-                    timeRunning = false;
-                }
-            }
         }
 
-        public void InitCrime(CrimeData _crime)
+        public void InitCrime()
         {
-            crime = _crime;
+            CrimeData[] crimes = Resources.LoadAll<CrimeData>("/");
+            //Debug.Log($"Crimes found: {crimes.Length}");
+            int selectedCrime = UnityEngine.Random.Range(0, crimes.Length);
 
-            InitCrimeScene();
+            crime = crimes[selectedCrime];
 
-            GenerateRooms();
+            FakeCrimes = GenerateFakeCrimes(crime);
+
+            List<Room.Room> newGameRooms = new List<Room.Room>(rooms);
+            InitCrimeScene(newGameRooms);
+
+            GenerateRooms(newGameRooms);
         }
 
-        private void InitCrimeScene()
+        private void InitCrimeScene(List<Room.Room> _rooms)
         {
-            crimeRoom = rooms.First(room => room.RoomType == crime.Room);
-            rooms.Remove(crimeRoom);
+            crimeRoom = _rooms.First(room => room.RoomType == crime.Room);
+            _rooms.Remove(crimeRoom);
 
+            Debug.Log($"Initialized crime in {crimeRoom.RoomType.ToString()}");
             crimeRoom.InitCrime(crime.VictimGenre, crime.VictimHairColor);
         }
 
-        private void GenerateRooms()
+        private void GenerateRooms(List<Room.Room> _rooms)
         {
-            /*foreach (Room.Room room in rooms)
-            {
-                room.InitRoom();
-            }*/
+            Clue[] crimeClues = GetCluesFromTypes(crime.Clues);
 
-            int randomRoom = UnityEngine.Random.Range(0, rooms.Count);
-            rooms[randomRoom].InitRoom(GetCluesFromTypes(crime.Clues));
-            rooms.Remove(rooms[randomRoom]);
+            int randomRoom = 0;
+
+            // Place clues in rooms
+            for (int i = 0; i < crimeClues.Length; i++)
+            {
+                randomRoom = UnityEngine.Random.Range(0, _rooms.Count);
+                _rooms[randomRoom].InitRoom(crimeClues[i]);
+                _rooms.Remove(_rooms[randomRoom]);
+            }
+
+            // Place weapon in a room
+            randomRoom = UnityEngine.Random.Range(0, _rooms.Count);
+            _rooms[randomRoom].InitRoom(ClueFactory.GetClueByType(crime.Weapon));
+            _rooms.Remove(_rooms[randomRoom]);
+
+            // Place criminal clues in a room
+            randomRoom = UnityEngine.Random.Range(0, _rooms.Count);
+            _rooms[randomRoom].InitRoom(ClueFactory.GetClueByType(crime.VictimGenre, crime.VictimHairColor));
+            _rooms.Remove(_rooms[randomRoom]);
         }
 
-        private Clue GetCluesFromTypes(CrimeTypes.Clues[] cluesTypes)
+        private Clue[] GetCluesFromTypes(CrimeTypes.Clues[] cluesTypes)
         {
             Clue[] clues = new Clue[cluesTypes.Length];
 
             for (int i = 0; i < clues.Length; i++)
             {
-                // todo init clues
-                //clues[i]
+                clues[i] = ClueFactory.GetClueByType(cluesTypes[i]);
             }
 
-            return clues[0];
+            return clues;
         }
 
-        private void StartTimer()
+        private CrimeData[] GenerateFakeCrimes (CrimeData correctCrime)
         {
-            timer = gameLimitTime * 60;
-            TimeLeft = gameLimitTime;
-            timeRunning = true;
+            CrimeData secondCrime = new CrimeData();
+            secondCrime.Room = correctCrime.Room;
+            secondCrime.VictimHairColor = correctCrime.VictimHairColor;
+
+            secondCrime.Weapon = (CrimeTypes.Weapons) ExcludeCorrectSelected(
+                UnityEngine.Random.Range(0, GlobalSettings.MAX_WEAPONS),
+                (int) correctCrime.Weapon,
+                GlobalSettings.MAX_WEAPONS);
+
+            secondCrime.VictimGenre = (CrimeTypes.Genre) UnityEngine.Random.Range(0, 2);
+            secondCrime.CriminalGenre = (CrimeTypes.Genre) UnityEngine.Random.Range(0, 2);
+            secondCrime.CriminalHairColor = (CrimeTypes.HairColor) UnityEngine.Random.Range(0, GlobalSettings.MAX_COLOR_HAIRS);
+
+
+            CrimeData thirdCrime = new CrimeData();
+            thirdCrime.Weapon = correctCrime.Weapon;
+
+            thirdCrime.Room = (CrimeTypes.Rooms) ExcludeCorrectSelected(
+                UnityEngine.Random.Range(0, GlobalSettings.MAX_ROOMS),
+                (int)correctCrime.Room,
+                GlobalSettings.MAX_ROOMS);
+
+            thirdCrime.VictimGenre = (CrimeTypes.Genre)UnityEngine.Random.Range(0, 2);
+            thirdCrime.VictimHairColor = (CrimeTypes.HairColor)UnityEngine.Random.Range(0, GlobalSettings.MAX_COLOR_HAIRS);
+            thirdCrime.CriminalGenre = (CrimeTypes.Genre)UnityEngine.Random.Range(0, 2);
+            thirdCrime.CriminalHairColor = (CrimeTypes.HairColor)UnityEngine.Random.Range(0, GlobalSettings.MAX_COLOR_HAIRS);
+
+            return new[] {secondCrime, thirdCrime};
+        }
+
+        private int ExcludeCorrectSelected (int selected, int correct, int maxPossible)
+        {
+            if (selected == correct)
+            {
+                int selectionFixed = (selected < maxPossible) ? selected + 1 : 0;
+                selectionFixed = ExcludeCorrectSelected(selectionFixed, correct, maxPossible);
+
+                return selectionFixed;
+            }
+
+            return selected;
         }
     }
 }
